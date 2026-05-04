@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+jinja2
+pydantic
+sqlalchemy
+python-dotenv
+openai
+python-docx
+reportlab
+pypdf2
