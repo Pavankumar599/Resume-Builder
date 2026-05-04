@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Resume Builder</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
@@ -9,18 +11,56 @@
         <h1>🎓 AI Resume Builder</h1>
         
         <form id="resumeForm">
+            
+            <!-- Personal Information -->
+            <h2>Personal Information</h2>
             <input type="text" id="name" placeholder="Full Name" required>
-            <input type="email" id="email" placeholder="Email" required>
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+            <input type="text" id="location" placeholder="Location (e.g. Hyderabad, Telangana)" required>
             
-            <textarea id="education" placeholder="Education (e.g. B.Tech CSE, NIT Warangal)" required></textarea>
-            <textarea id="skills" placeholder="Skills (comma separated)" required></textarea>
-            <textarea id="projects" placeholder="Projects"></textarea>
-            <textarea id="experience" placeholder="Experience / Internships"></textarea>
-            
-            <input type="text" id="jd_title" placeholder="Job Title (e.g. Software Engineer)" required>
-            <textarea id="jd_description" placeholder="Paste Job Description" required></textarea>
-            
-            <button type="submit">Generate Resume with AI</button>
+            <input type="url" id="linkedin_url" placeholder="LinkedIn Profile URL">
+            <input type="url" id="github_url" placeholder="GitHub Profile URL">
+            <input type="url" id="portfolio_url" placeholder="Portfolio / Website URL">
+
+            <!-- Professional Summary -->
+            <h2>Professional Summary</h2>
+            <textarea id="profile_summary" rows="4" placeholder="Write a short professional summary (3-5 lines)"></textarea>
+
+            <!-- Job Targeting -->
+            <h2>Job Targeting</h2>
+            <input type="text" id="target_job_title" placeholder="Target Job Title (e.g. Full Stack Developer)" required>
+            <input type="text" id="jd_title" placeholder="Job Title from JD" required>
+            <textarea id="jd_description" rows="6" placeholder="Paste the full Job Description here..." required></textarea>
+
+            <!-- Education -->
+            <h2>Education</h2>
+            <textarea id="education" rows="4" placeholder="B.Tech in Computer Science&#10;National Institute of Technology, Warangal (2020-2024)&#10;CGPA: 8.5" required></textarea>
+
+            <!-- Experience -->
+            <h2>Work Experience / Internships</h2>
+            <textarea id="experience" rows="6" placeholder="Company Name - Job Title (Dates)&#10;• Achievement 1&#10;• Achievement 2"></textarea>
+
+            <!-- Projects -->
+            <h2>Projects</h2>
+            <textarea id="projects" rows="5" placeholder="Project Title&#10;• Description and technologies used&#10;• Link (if any)"></textarea>
+
+            <!-- Skills -->
+            <h2>Skills</h2>
+            <textarea id="skills" rows="3" placeholder="React, Node.js, Python, Django, AWS, Docker, PostgreSQL..." required></textarea>
+
+            <!-- Additional Fields -->
+            <h2>Additional Information</h2>
+            <textarea id="certifications" rows="3" placeholder="AWS Certified Developer, Google Data Analytics..."></textarea>
+            <textarea id="achievements" rows="3" placeholder="Improved system performance by 40%..."></textarea>
+            <textarea id="languages" rows="2" placeholder="English (Fluent), Hindi (Native), Telugu (Native)"></textarea>
+
+            <div class="optional">
+                <input type="text" id="years_of_experience" placeholder="Total Years of Experience">
+                <input type="text" id="notice_period" placeholder="Notice Period (e.g. 30 days)">
+            </div>
+
+            <button type="submit">🚀 Generate Resume with AI</button>
         </form>
 
         <div id="result" class="result"></div>
@@ -29,56 +69,64 @@
     <script>
         document.getElementById('resumeForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
             const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '<p>Generating resume with AI...</p>';
+            resultDiv.innerHTML = '<p><strong>Generating your AI-powered resume...</strong></p>';
 
             const formData = new FormData();
-                                    // Personal Information
-                        formData.append('name', document.getElementById('name').value);
-                        formData.append('email', document.getElementById('email').value);
-                        formData.append('phone', document.getElementById('phone').value);
-                        formData.append('location', document.getElementById('location').value);
-                        formData.append('linkedin_url', document.getElementById('linkedin_url').value);
-                        formData.append('github_url', document.getElementById('github_url').value);
-                        formData.append('portfolio_url', document.getElementById('portfolio_url').value);
-                        
-                        // Professional Summary
-                        formData.append('profile_summary', document.getElementById('profile_summary').value);
-                        
-                        // Job Targeting
-                        formData.append('target_job_title', document.getElementById('target_job_title').value);
-                        formData.append('jd_title', document.getElementById('jd_title').value);
-                        formData.append('jd_description', document.getElementById('jd_description').value);
-                        
-                        // Education (as JSON string if multiple, or simple textarea)
-                        formData.append('education', document.getElementById('education').value);
-                        
-                        // Experience
-                        formData.append('experience', document.getElementById('experience').value);
 
-                        // Projects
-                        formData.append('projects', document.getElementById('projects').value);
-                        
-                        // Skills
-                        formData.append('skills', document.getElementById('skills').value);
-                        
-                        // Additional Important Fields
-                        formData.append('certifications', document.getElementById('certifications').value);
-                        formData.append('achievements', document.getElementById('achievements').value);
-                        formData.append('languages', document.getElementById('languages').value);
-                        
-                        
-            const res = await fetch('/generate', { method: 'POST', body: formData });
-            const data = await res.json();
+            // Personal Information
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('phone', document.getElementById('phone').value);
+            formData.append('location', document.getElementById('location').value);
+            formData.append('linkedin_url', document.getElementById('linkedin_url').value);
+            formData.append('github_url', document.getElementById('github_url').value);
+            formData.append('portfolio_url', document.getElementById('portfolio_url').value);
 
-            resultDiv.innerHTML = `
-                <h2>Skill Analysis</h2>
-                <pre>${data.analysis}</pre>
-                <h2>Resume Preview</h2>
-                <pre>${data.resume_preview}</pre>
-                <a href="${data.download_pdf}" download>Download PDF</a><br>
-                <a href="${data.download_docx}" download>Download DOCX</a>
-            `;
+            // Professional Summary
+            formData.append('profile_summary', document.getElementById('profile_summary').value);
+
+            // Job Targeting
+            formData.append('target_job_title', document.getElementById('target_job_title').value);
+            formData.append('jd_title', document.getElementById('jd_title').value);
+            formData.append('jd_description', document.getElementById('jd_description').value);
+
+            // Main Sections
+            formData.append('education', document.getElementById('education').value);
+            formData.append('experience', document.getElementById('experience').value);
+            formData.append('projects', document.getElementById('projects').value);
+            formData.append('skills', document.getElementById('skills').value);
+
+            // Additional Fields
+            formData.append('certifications', document.getElementById('certifications').value);
+            formData.append('achievements', document.getElementById('achievements').value);
+            formData.append('languages', document.getElementById('languages').value);
+            formData.append('years_of_experience', document.getElementById('years_of_experience').value);
+            formData.append('notice_period', document.getElementById('notice_period').value);
+
+            try {
+                const res = await fetch('/generate', { 
+                    method: 'POST', 
+                    body: formData 
+                });
+                
+                const data = await res.json();
+                
+                resultDiv.innerHTML = `
+                    <h2>✅ Resume Generated Successfully!</h2>
+                    <h3>Skill Analysis</h3>
+                    <pre>${data.analysis || 'No analysis returned'}</pre>
+                    
+                    <h3>Resume Preview</h3>
+                    <pre>${data.resume_preview || 'No preview available'}</pre>
+                    
+                    <a href="${data.download_pdf || '#'}" download>📄 Download PDF</a><br><br>
+                    <a href="${data.download_docx || '#'}" download>📝 Download DOCX</a>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p style="color:red;">Error: ${error.message}</p>`;
+            }
         });
     </script>
 </body>
