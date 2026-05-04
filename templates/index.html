@@ -33,15 +33,41 @@
             resultDiv.innerHTML = '<p>Generating resume with AI...</p>';
 
             const formData = new FormData();
-            formData.append('name', document.getElementById('name').value);
-            formData.append('email', document.getElementById('email').value);
-            formData.append('education', document.getElementById('education').value);
-            formData.append('skills', document.getElementById('skills').value);
-            formData.append('projects', document.getElementById('projects').value);
-            formData.append('experience', document.getElementById('experience').value);
-            formData.append('jd_title', document.getElementById('jd_title').value);
-            formData.append('jd_description', document.getElementById('jd_description').value);
+                                    // Personal Information
+                        formData.append('name', document.getElementById('name').value);
+                        formData.append('email', document.getElementById('email').value);
+                        formData.append('phone', document.getElementById('phone').value);
+                        formData.append('location', document.getElementById('location').value);
+                        formData.append('linkedin_url', document.getElementById('linkedin_url').value);
+                        formData.append('github_url', document.getElementById('github_url').value);
+                        formData.append('portfolio_url', document.getElementById('portfolio_url').value);
+                        
+                        // Professional Summary
+                        formData.append('profile_summary', document.getElementById('profile_summary').value);
+                        
+                        // Job Targeting
+                        formData.append('target_job_title', document.getElementById('target_job_title').value);
+                        formData.append('jd_title', document.getElementById('jd_title').value);
+                        formData.append('jd_description', document.getElementById('jd_description').value);
+                        
+                        // Education (as JSON string if multiple, or simple textarea)
+                        formData.append('education', document.getElementById('education').value);
+                        
+                        // Experience
+                        formData.append('experience', document.getElementById('experience').value);
 
+                        // Projects
+                        formData.append('projects', document.getElementById('projects').value);
+                        
+                        // Skills
+                        formData.append('skills', document.getElementById('skills').value);
+                        
+                        // Additional Important Fields
+                        formData.append('certifications', document.getElementById('certifications').value);
+                        formData.append('achievements', document.getElementById('achievements').value);
+                        formData.append('languages', document.getElementById('languages').value);
+                        
+                        
             const res = await fetch('/generate', { method: 'POST', body: formData });
             const data = await res.json();
 
