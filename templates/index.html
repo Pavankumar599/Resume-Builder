@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Builder</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 AI Resume Builder</h1>
+        
+        <form id="resumeForm">
+            <input type="text" id="name" placeholder="Full Name" required>
+            <input type="email" id="email" placeholder="Email" required>
+            
+            <textarea id="education" placeholder="Education (e.g. B.Tech CSE, NIT Warangal)" required></textarea>
+            <textarea id="skills" placeholder="Skills (comma separated)" required></textarea>
+            <textarea id="projects" placeholder="Projects"></textarea>
+            <textarea id="experience" placeholder="Experience / Internships"></textarea>
+            
+            <input type="text" id="jd_title" placeholder="Job Title (e.g. Software Engineer)" required>
+            <textarea id="jd_description" placeholder="Paste Job Description" required></textarea>
+            
+            <button type="submit">Generate Resume with AI</button>
+        </form>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('resumeForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<p>Generating resume with AI...</p>';
+
+            const formData = new FormData();
+            formData.append('name', document.getElementById('name').value);
+            formData.append('email', document.getElementById('email').value);
+            formData.append('education', document.getElementById('education').value);
+            formData.append('skills', document.getElementById('skills').value);
+            formData.append('projects', document.getElementById('projects').value);
+            formData.append('experience', document.getElementById('experience').value);
+            formData.append('jd_title', document.getElementById('jd_title').value);
+            formData.append('jd_description', document.getElementById('jd_description').value);
+
+            const res = await fetch('/generate', { method: 'POST', body: formData });
+            const data = await res.json();
+
+            resultDiv.innerHTML = `
+                <h2>Skill Analysis</h2>
+                <pre>${data.analysis}</pre>
+                <h2>Resume Preview</h2>
+                <pre>${data.resume_preview}</pre>
+                <a href="${data.download_pdf}" download>Download PDF</a><br>
+                <a href="${data.download_docx}" download>Download DOCX</a>
+            `;
+        });
+    </script>
+</body>
+</html>
